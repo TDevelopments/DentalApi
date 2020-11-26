@@ -1,0 +1,11 @@
+version: '3.6'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-CU8-ubuntu-16.04
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "${DB_USER_PASSWORD}"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
