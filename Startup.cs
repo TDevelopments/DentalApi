@@ -12,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using DentalApi.Middleware;
 using DentalApi.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
@@ -36,12 +35,19 @@ namespace DentalApi
 
             services.AddControllers();
 
+
             //EntityFramework
             services.AddDbContext<ApplicationDbContext>
                 ( options => options.UseSqlServer(Configuration.GetConnectionString("ConnStr")));
 
             //For Identity
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+                    options.Lockout.MaxFailedAccessAttempts = 5;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireUppercase = false;
+                    options.User.RequireUniqueEmail = true;
+                    })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
